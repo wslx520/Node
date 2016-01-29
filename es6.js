@@ -8,6 +8,28 @@ function test(aaa,bbb, arg){
     console.log([...arguments]);
     console.log('Node当前使用的v8引擎版本:', process.versions.v8);
     // "use strict";
+    // Class and extends
+    class Point {
+        constructor (a, b) {
+            this.name = 'p';
+        }
+        toString() {
+            return {}.toString();
+        }
+        // 通过对对应key设置set，可以阻止对指定的key设置值,即 obj.xx = 'xxx'就会报错
+        set not(n) {
+            throw new Error('can not set not');
+        }
+    }
+    class NewPoint extends Point {
+        constructor (n) {
+            super();
+            this.name = n;
+        }
+    }
+    const point = new NewPoint('a point');
+    // point.not = 'not';
+    console.log(point.name)
     const a = 'const is ok';
     let b = 'let is ok';
     // const [first, ...more] = ['first array element', 'a', 'b',1,2,3,4]; //不支持
