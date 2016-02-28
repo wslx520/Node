@@ -1,0 +1,136 @@
+﻿<title>简易数组操作</title>
+<style>
+p {line-height:168%; margin:12px auto;}
+b{color:#f00;}
+</style>
+<script type="text/javascript">
+		
+   var arr=[1,3,4,6,8,"skldjf","soiweroi","a","b","c","d","elks","lkj","asdw","port"];
+   var b=arr;
+   function $(id){return document.getElementById(id);}
+   function arrjoin(){
+		var c=b.join();
+		alert(c);
+		$("arrJoin").value=c;
+   }
+  function arrsort(){
+	$("arrsort").value=b.sort();
+  }
+function arrreverse(){
+	$("arrreverse").value = b.reverse();
+}
+function addItem(){
+	var newItem=$("newItem").value;
+	if(newItem!=""){
+		var newval=newItem.split(",");//把得到的字符串用,分隔成数组
+		for(i=0;i<=newval.length-1;i++){
+			//alert(newval[i]);
+			b=b.concat(newval[i]);
+			$("newarr").innerHTML = b.join();
+		}
+	}
+}
+function arrslice(){
+	sliceArg = $("sliceArg").value;
+	if(sliceArg!=""){
+		var val=sliceArg.split(",");
+		arrTemp = b.slice(val[0],val[1]);
+		$("sliceItems").innerHTML = arrTemp;
+	}
+}
+function spliceItem(){
+	var spliceItem = $("spliceItem").value;
+	if(spliceItem!=""){
+		eval('b.splice('+spliceItem+')');
+		$("spliceItems").innerHTML = b.join();
+	}
+}
+function arrpush(){
+	var pushval=$("pushval").value;
+	if(pushval!=""){
+		eval('b.push('+pushval+')');
+		$("pushArr").innerHTML = b.join();
+	}
+}
+function arrpop(){
+	b.pop();
+	$("pushArr").innerHTML = b.join();
+}
+function arrunshift(){
+	var unshiftval = $("unshiftval").value;
+	if(unshiftval!=""){
+		eval('b.unshift('+unshiftval+')');
+		$("unshiftArr").innerHTML = b.join();
+	}
+}
+function arrshift(){
+	b.shift();
+	$("unshiftArr").innerHTML = b.join();
+}
+</script>
+<body>
+<p style="font-size:14pt;">数组arr的初始值：1,3,4,6,8,"skldjf","soiweroi","a","b","c","d","elks","lkj","asdw","port"</p>
+<p>
+数组的join()方法，作用是把数组串联成为一个字符串<br/>
+<input id="arrJoin" size="60"/><input type="button" onclick="arrjoin()" value="串联join()"/></p>
+<p><input id="arrsort" size="60"/><input type="button" onclick="arrsort()" value="排序sort()"/></p>
+<p><input id="arrreverse" size="60"/><input type="button" onclick="arrreverse()" value="反向reverse()"/></p>
+<p>向数组内添加元素,最多同时添加5个，元素间用英文,分隔<br/>
+使用的是数组的<b>concat()</b>方法
+<input id="newItem" size="20"/><input type="button" onclick="addItem()" value="添加"/><br/>
+添加元素后的arr的值：
+<div id="newarr">
+
+</div>
+</p>
+<p>提取数组元素，,只是取出，不会更改原数组的数据<br/>
+使用的是数组的<b>slice()</b>方法，<br/>
+他有两个参数，分别指定取值的开始位置和结束位置，返回的是从第一个参数开始到第二个参数为止间的元素（不包括第二个参数的那个位置的元素）,第二个参数必须大于第一个参数。返回元素的个数为两个参数之差<b>实际位置=参数位置-1</b><br/>
+如果只有一个参数，则返回从这个参数开始到此数组末尾的所有元素<br/>
+如果参数第一个是负数,则必须两个都是负数，且第二个参数必须大于第一个参数，如-3,-1,反过来，则不行,表示从最后一个元素开始往前取值,<br/>
+指定首尾位置参数,必须是数字，同样用英文,分隔：
+<input id="sliceArg" size="20"/><input type="button" onclick="arrslice()" value="取值"/><br/>
+取出的值：
+<div id="sliceItems">
+
+</div>
+</p>
+<p>插入或删除数组元素，这个，当然要更改原数组 的数据<br/>
+使用的是数组的<b>splice()</b>方法，与上一个方法只差一个字母，但结果大不相同<br/>
+splice()方法可以接受多个参数，第一个参数指定的是我插入或删除的元素在数组中的位置，第二个参数是要删除的个数（如省略，则删除从开始到结束的所有元素.意思是说，你要是不想删数据的话，则把第二个参数填成0），两者均必须为数字<br/>
+第二个参数后，可以接任意多个参数，作用是在指定位置（即之前的第一个参数）开始插入元素
+<input id="spliceItem" size="20"/><input type="button" onclick="spliceItem()" value="修改"/><br/>
+添加或删除的元素
+<div id="spliceItems">
+</div>
+修改元素后的arr的值：
+<div id="spliceArr">
+</div>
+</p>
+<p>
+在数组末尾添加/删除数据<br/>
+添加用push(),删除用pop();<br/>
+<input id="pushval" size="20"/><input type="button" onclick="arrpush()" value="添加push()"/><input type="button" onclick="arrpop()" value="删除pop()"/>
+<div id="pushArr"></div>
+</p>
+<p>
+在数组开头添加/删除数据<br/>
+添加用unshift(),删除用shift();<br/>
+<input id="unshiftval" size="20"/><input type="button" onclick="arrunshift()" value="添加unshift()"/><input type="button" onclick="arrshift()" value="删除shift()"/>
+<div id="unshiftArr"></div>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
