@@ -1,5 +1,6 @@
 /* 测试node.js中对es6语法的支持,2016/1-12,node5.4.0 */
 "use strict";
+// import { stat, exists, readFile } from 'fs';
 function test(aaa,bbb, arg){
     // 参数默认值， a = 1，不支持
     // rest参数，...arg, 不支持
@@ -11,6 +12,7 @@ function test(aaa,bbb, arg){
     // Class and extends
     class Point {
         constructor (a, b) {
+            console.log(new.target)
             this.name = 'p';
         }
         toString() {
@@ -30,8 +32,10 @@ function test(aaa,bbb, arg){
     const point = new NewPoint('a point');
     // point.not = 'not';
     console.log(point.name)
+    // const [a, b, c] = [1, 2, 3];
     const a = 'const is ok';
     let b = 'let is ok';
+    const fun = (a) => a*2;
     // const [first, ...more] = ['first array element', 'a', 'b',1,2,3,4]; //不支持
     console.log(a, b);
     // const merge = (...sources) => Object.assign({}, ...sources);
@@ -108,5 +112,16 @@ function test(aaa,bbb, arg){
     // 此外Number上还加有：isInteger(是否整数),isSafeInteger
     // Math新方法
     console.log(Math.trunc('1234.1'), Math.sign(-123))
+    // Async
+    /*var asy = async function () {
+        var file = await readfile('http://t.cn');
+        console.log(file)
+    }
+    var readfile = function (url) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(resolve, 1000, {a:'aaa'}})
+        })
+    }*/
 }
 test(1,2,3,4,null)
+// export {a:'aaaa'};

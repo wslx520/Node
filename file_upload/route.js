@@ -1,12 +1,15 @@
+'use strict';
 var url = require('url');
 var htmlTemplate = require('./html');
 
 var routes = {
 	'/upload': function () {
-		return `<form action="/form_request" method="POST">
-		<textarea name="text" id="" cols="30" rows="10"></textarea>
-		<input type="submit" value="提交" />
-	</form>`;
+		return `
+        <form action="/form_request" method="POST">
+    		<textarea name="text" id="text" cols="30" rows="10"></textarea>
+            <input type="file" name="attach" id="attach" />
+    		<input type="submit" value="提交" />
+    	</form>`;
 	},
 	'/login': function () {
 		
@@ -18,6 +21,10 @@ var routes = {
 
 function initRequestEvent (req, res, pathname) {
 	var postData = '';
+    for(let r in req) {
+        // console.log(r);
+    }
+    console.log(req.method);
 	req.setEncoding('utf8');
 	req.addListener('data', function (chunk) {
 		postData += chunk;
