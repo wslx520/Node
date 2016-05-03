@@ -17,12 +17,12 @@ suite('Remove one element from an array', function () {
   }
   
   bench('Array#splice', function () {
-    let array = [1, 2, 3,1, 2, 3,1, 2, 3]
+    let array = [1, 2, 3,4,5,6,7,8,9]
     array.splice(1, 3)
   })
 
   bench('EventEmitter way', function () {
-    let array = [1, 2, 3,1, 2, 3,1, 2, 3]
+    let array = [1, 2, 3,4,5,6,7,8,9]
     spliceMore(array, 1, 3)
   })
 })
