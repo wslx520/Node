@@ -1,44 +1,44 @@
-# etpl-wrap etplģ�������Node��װ��
+# etpl-wrap etpl模板引擎的Node包装器
 
-etpl-wrap���ڰ�װetplģ�����棬�Ա�����Node.js������ʹ�á�
+etpl-wrap用于包装etpl模板引擎，以便于在Node.js环境下使用。
 
-etpl-wrap��װ���Ƕ�����ģ�����棬�������κ�web��ܣ������������κο�ܡ�
+etpl-wrap包装后，是独立的模板引擎，不依赖任何web框架，但又适用于任何框架。
 
-## ΪʲôҪ��װetpl?
+## 为什么要包装etpl?
 
-etpl�����ǿ�������Node�µģ������ڷ������������������������ͬ��etpl���ʺ���������ˡ�
+etpl本身是可以用在Node下的，但由于服务器环境和浏览器端天生不同，etpl更适合于浏览器端。
 
-**��Щʲô��ͬ��**
+**有些什么不同？**
 
-�Ӻ�����Ե�ģ��������ÿ��ģ�壬һ�����һ���ļ���������������ˣ���Ҫ��ʽ������һ����ģ�顱������Ӵ�����֪ʶ������JSP����֪�����ǿ��Խ�����ģ���ļ�����include�������Ҫ����ҳ��
+从后端语言的模板来讲，每个模板，一般就是一个文件，而不像浏览器端，需要显式的声明一个“模块”。如果接触后后端知识，比如JSP，就知道他们可以将几个模板文件互相include，组成想要的网页。
 
-���⣬������Ե�ģ���ļ����ڲ�ͬĿ¼�µ�Ȼ�������������Ŀ¼root����list.html��root/content��Ҳ����list.html�����Ƿǳ����������󣬶��������ļ�����Ӧ���ǲ�ͬ�ġ�
+另外，后端语言的模板文件，在不同目录下当然允许重名。如根目录root下有list.html，root/content下也能有list.html，这是非常正常的需求，而且两个文件明显应该是不同的。
 
-����������ˣ�Ҫ���Լ����target���Ƴ�ͻ�����⡣
+而在浏览器端，要你自己规避target名称冲突的问题。
 
-��Ϊ��˵�ģ����һ�����ļ�������Ҳ���漰��·�������⡣�������û������⣨��Ȼetpl֧�ְ�target name��Ϊ·����ʽ�磺main/content/list��������Ҫ���Լ�������
+因为后端的模块是一个个文件，所以也就涉及到路径的问题。浏览器端没这个问题（虽然etpl支持把target name设为路径形式如：main/content/list，但这需要你自己命名）
 
-�����ļ��������������ԣ�������������ˣ���Ҫ��target�������ں�˾Ͳ�����Ҫ�ġ�������ÿ��ģ���ļ��Ͷ�Ӧ��Ӧ��target
+由于文件天生独立的特性，所以在浏览器端，必要的target声明，在后端就不再需要的————每个模板文件就对应相应的target
 
-## ʹ�÷���
+## 使用方法
 
-�Ȱ�װetpl���ٰ�װetpl-wrap��Ȼ��
+先安装etpl，再安装etpl-wrap，然后：
 
 	const ETPL = require('etpl-wrap');
 	let etpl = new ETPL('./views','.html')
 	
-new ETPL�Ĳ��������ǣ�**ģ���ļ���Ŀ¼**��**ģ���ļ�Ĭ�Ϻ�׺��**��
+new ETPL的参数依次是：**模板文件根目录**，**模板文件默认后缀名**。
 
-��ʱ�Ϳ������������һ����ʹ��etpl.render��Ⱦ��Ӧģ���ˣ�
+此时就可以像在浏览器一样，使用etpl.render渲染对应模板了：
 
 	etpl.render('index', {
-        title:'��ӭ��',
-        welcome:'�ǳ���ӭ��'
+        title:'欢迎！',
+        welcome:'非常欢迎你'
     })
 	
-�˴��뼴��Ⱦ��ģ���Ŀ¼�µ�index�ļ���
+此代码即渲染了模板根目录下的index文件。
 
-�����Ҫ������Ⱦ��Ŀ¼�µ�ĳģ�壬��
+如果你要独立渲染子目录下的某模板，则：
 
 	etpl.render('content/list', data);
 

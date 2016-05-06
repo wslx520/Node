@@ -1,3 +1,12 @@
+/*
+* etpl-wrap
+* etpl的node包装器
+* Version:0.1.0
+* Author: 十年灯
+* Url: https://github.com/wslx520/Node/tree/master/etpl-wrap
+* Site: http://jo2.org
+*/
+
 'use strict';
 const ETPL = require('etpl');
 if(!ETPL) throw new Error('You must install etpl before use etpl-wrap');
@@ -67,7 +76,8 @@ function compileFile (filepath, filename) {
         // log(targetcmdReg)
     }
     if(!importcmdReg) {
-        importcmdReg = new RegExp(options.commandOpen + '\\s*import\\s*:\\s*([a-z0-9\\/_-]+)\\s*' + close, 'ig');
+        // 此正则里的target name匹配规则与etpl不同，因为我们需要转换引用父级模板的语法如：import: ../sidebar
+        importcmdReg = new RegExp(options.commandOpen + '\\s*import\\s*:\\s*(\.*[a-z0-9\\/_-]+)\\s*' + close, 'ig');
         // log(importcmdReg)
     }
     fs.readFile(filepath, function (err, content) {
@@ -96,7 +106,7 @@ function compileFile (filepath, filename) {
             ) {
                 let justname = relative.slice(0, -extName.length);
                 // 如果是主模板文件，且位于子目录中，则以其目录名做target名
-                if(mainFiles[path.basename(justname)] && insubdir) {
+                if(insubdir && path.basename(justname) === options.mainFile) {
                     justname = dir = path.dirname(justname);
                 }
                 justname = justname.replace(/\\/g,'\/');
@@ -162,43 +172,8 @@ EtplWrap.prototype = {
             }
             extNames[xt] = 1;
         })
-        let mainFile = self.options.mainFile;
-
-        if('string' === typeof mainFile) {
-            mainFile = [mainFile];
-        }
-
-        mainFile.forEach(function (mf) {
-            mainFiles[mf] = 1;
-        })
-        log(mainFiles);
         // log('template path is ' + root);
         walk.call(self, root, compileFile);
-        return ;
-        fs.readdir(root, function (err, files) {
-            if(!err) {
-                files = files.filter(function (filename, index) {
-                    let extName = path.extname(filename);
-                    if(extNames[extName]) {
-                        log('find a template: '+filename)
-                        fs.readFile(path.resolve(root, filename), function (err, content) {
-                            if(!err) {
-                                content = content.toString('utf8').trim();
-                                let firstline = content.slice(0, content.indexOf('\n'));
-                                // log(firstline);
-                                // 如果第一句没有target声明，则以文件名作target名补上
-                                if(!targetReg.test(firstline)) {
-                                    let tgt = self.options.commandOpen + ' target:' + filename.slice(0, -extName.length) + self.options.commandClose;
-                                    content = tgt + content;
-                                }
-                                // log(content)
-                                self.engine.compile(content);
-                            }
-                        })
-                    }
-                })
-            }
-        })
     },
     config: function (conf) {
         return this.engine.config(extend(this.options, conf));
