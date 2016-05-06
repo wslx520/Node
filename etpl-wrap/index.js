@@ -47,7 +47,8 @@ let targetReg = /\s*target\s*:\s*([a-z0-9\/_-]+)\s*/;
 let targetcmdReg = null;
 let importcmdReg = null;
 // 遍历指定目录下的所有文件及目录，并对[文件]执行回调
-function walk(root, callback) {   
+// 增加一个额外的参数，以避免用call调用函数造成效率损失
+function walk(root, callback, EW) {   
      // 保持对EtplWrap的指向
     let self = this;
     fs.readdir(root, function (err, files) {
@@ -56,18 +57,17 @@ function walk(root, callback) {
                 let stat = fs.statSync(path.resolve(root, filename));
                 log('isFile? ', stat.isFile())
                 if(stat.isFile()) {
-                    callback.call(self, path.resolve(root, filename), filename);                 
+                    callback(path.resolve(root, filename), filename, EW);                 
                 } else {
-                    walk.call(self, path.resolve(root, filename), callback);
+                    walk(path.resolve(root, filename), callback, EW);
                 }
             })
         }
     })
 }
-function compileFile (filepath, filename) {
+function compileFile (filepath, filename, EW) {
     log('find a template: '+filename)
-    let self = this;
-    let options = self.options;
+    let options = EW.options;
     let extName = path.extname(filename);
     let open = options.commandOpen;
     let close = options.commandClose;
@@ -143,7 +143,7 @@ function compileFile (filepath, filename) {
             // 将content补全
             content = firstTargetCmd + content;
             // log(content)
-            self.engine.compile(content);
+            EW.engine.compile(content);
         }
     })
 }
@@ -173,13 +173,16 @@ EtplWrap.prototype = {
             extNames[xt] = 1;
         })
         // log('template path is ' + root);
-        walk.call(self, root, compileFile);
+        walk(root, compileFile, self);
     },
     config: function (conf) {
         return this.engine.config(extend(this.options, conf));
     },
     render: function (target, data) {
         return this.engine.render(target, data);
+    },
+    compile: function (str) {
+        return this.engine.compile(str);
     }
 }
 module.exports =  EtplWrap;
