@@ -4,6 +4,8 @@ etpl-wrap用于包装etpl模板引擎，以便于在Node.js环境下使用。
 
 etpl-wrap包装后，是独立的模板引擎，不依赖任何web框架，但又适用于任何框架。
 
+[使用文档](https://github.com/wslx520/Node/tree/master/etpl-wrap/doc)
+
 ## 为什么要包装etpl?
 
 etpl本身是可以用在Node下的，但由于服务器环境和浏览器端天生不同，etpl更适合于浏览器端。
