@@ -1,3 +1,6 @@
+
+可clone本包，并启动test/server.js，然后访问 http://localhost:3001/ 查看效果。 
+
 # etpl-wrap 使用文档
 
 本来想装个逼来个英文的文档的，但etpl自身的文档都是中文的，所以我这里搞个英文的也没必要了。
@@ -19,6 +22,14 @@ etpl-wrap是一个etpl的包装器，便于在**Node.js**下使用etpl模板引�
 new ETPL的参数，依次是指定模板文件的根目录，及模板文件的默认后缀名
 
 可以使用**etpl.js本来的配置参数**，作一个对象，传入new中
+
+此时你就可以在需要的时候，渲染对应的模板：
+	
+	// 渲染模板目录下的index文件
+	response.end(eptl.render('index', {
+		welcome:'hello',
+		title:'欢迎你'
+	}))
 
 ## 模板
 
@@ -49,16 +60,20 @@ new ETPL的参数，依次是指定模板文件的根目录，及模板文件的
 
 比如index.html，虽然会自动生成 `<!-- target:index-->`，但你也可以在此文件里面，多处使用 `<!-- target:li-->`, `<!-- target:ul-->`等声明其他target
 
+同模板文件下的多个target, **与主target是同级**的。
+
 ## 引用模板
 
 **同级**模板请直接`<!-- import:a_temp_file_name -->`
 
-虽然服务器下的模板文件因为都是文件而有后缀名，但在import时千万**不要**加上后缀名(如果以后发生后缀名更改，不至于改源代码；另外，etpl的target name中，**不允许**包含.的其实)
+虽然服务器下的模板文件因为都是文件而有后缀名，但在import时千万**不要**加上后缀名。原因：
+
+1.如果以后发生后缀名更改，不至于改源代码；
+2.etpl的target name中，**不允许**包含.的其实
 
 引用子目录下的模板
     <!-- import:main/content/ -->
 
 引用父级模板
-    <!-- import:../main/content/ -->
-
-    
+    <!-- import:../main/content/li -->
+   

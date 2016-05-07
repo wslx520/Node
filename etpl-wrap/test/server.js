@@ -6,7 +6,6 @@ const http = require('http');
 // console.log(ETPL)
 let etpl = new ETPL('./views','.html')
 
-console.log(path.join('a/b/c','../b/bb'))
 setTimeout(function  () {
     console.log(etpl.render('index', {
         title:'欢迎！',

@@ -1,7 +1,7 @@
 /*
 * etpl-wrap
 * etpl的node包装器
-* Version:0.1.0
+* Version:0.1.4
 * Author: 十年灯
 * Url: https://github.com/wslx520/Node/tree/master/etpl-wrap
 * Site: http://jo2.org
@@ -55,7 +55,7 @@ function walk(root, callback, EW) {
         if(!err) {
             files = files.filter(function (filename, index) {
                 let stat = fs.statSync(path.resolve(root, filename));
-                log('isFile? ', stat.isFile())
+                // log('isFile? ', stat.isFile())
                 if(stat.isFile()) {
                     callback(path.resolve(root, filename), filename, EW);                 
                 } else {
@@ -66,7 +66,7 @@ function walk(root, callback, EW) {
     })
 }
 function compileFile (filepath, filename, EW) {
-    log('find a template: '+filename)
+    log('find a template file: '+filepath)
     let options = EW.options;
     let extName = path.extname(filename);
     let open = options.commandOpen;
@@ -83,20 +83,17 @@ function compileFile (filepath, filename, EW) {
     fs.readFile(filepath, function (err, content) {
         if (!err) {
             content = content.toString('utf8').trim();
-            // 保存下当前模板文件的主targetName
-            let mainTarget = null;
+
             let firstTargetCmd = null;
             let dir = '';
 
             let relative = path.relative(options.root, filepath);
             // 是否在子目录中
             let insubdir = relative.indexOf(path.sep) > -1;
-            log('relative',relative, insubdir);
             // 当前子目录
             if(insubdir) {
                 dir = path.dirname(relative);;
             }
-            // log('------------------------',dir)
             // 快速判断出第一句是不是target声明
             if (
                 // 如果不是以命令语句开头
@@ -105,13 +102,12 @@ function compileFile (filepath, filename, EW) {
                 || !targetReg.test(content.substr(open.length, content.indexOf(close)))
             ) {
                 let justname = relative.slice(0, -extName.length);
-                // 如果是主模板文件，且位于子目录中，则以其目录名做target名
-                if(insubdir && path.basename(justname) === options.mainFile) {
-                    justname = dir = path.dirname(justname);
+                // 如果是主模板文件名，且位于子目录中，则以其目录名做target名
+                if(dir && path.basename(justname) === options.mainFile) {
+                    justname = dir;
                 }
                 justname = justname.replace(/\\/g,'\/');
-                log('generate target: ',justname)
-                mainTarget = justname;
+                log('generate a target: ',justname)
                 firstTargetCmd = open + 'target:' + justname + close;
             }
             // 是以target声明开头，则直接取出第一个target name
@@ -119,24 +115,21 @@ function compileFile (filepath, filename, EW) {
                 firstTargetCmd = content.substr(0, content.indexOf(close) + close.length);
                 // 抛除第一句target
                 content = content.substr(firstTargetCmd.length);
-                mainTarget = targetcmdReg.test(firstTargetCmd) && RegExp.$1;
-                log(firstTargetCmd,mainTarget);
             }
-            // 如果是子目录下的模板，则检查content(已抛出第一个target声明)，转换其中的包含的其他target的路径
+            // 如果是子目录下的模板，则检查content(已抛除第一个target声明)，转换其中的包含的其他target的路径
             if(insubdir) {
                 content = content.replace(targetcmdReg, function (m, targetName) {
-                    // log('main: ', m, mainTarget, targetName)
-                    if(/\\|\//.test(targetName)) {
-                        throw new Error('EtplWrap: when define target, it\'s name could not contains path separator.')
-                    }
+                    // if(/\\|\//.test(targetName)) {
+                    //     throw new Error('EtplWrap: when define target, it\'s name could not contains path separator.')
+                    // }
                     targetName = path.join(dir, targetName).replace(/\\/g,'/');
-                    log('ttttttttttttttttttttttt', dir,targetName)
+                    log('replace a target definitaion: ', dir,targetName)
                     return open + 'target:' + targetName + close;
                 })
                 // 替换 import命令里目标target路径
                 .replace(importcmdReg, function (m, targetName) {
                     targetName = path.join(dir, targetName).replace(/\\/g,'/');
-                    log('iiiiiiiiiiiiiiiiiiiiiiiiii', dir,targetName)
+                    log('replace a import command: ', dir,targetName)
                     return open + 'import:' + targetName + close;            
                 })
             };
