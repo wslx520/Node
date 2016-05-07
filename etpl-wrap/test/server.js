@@ -7,10 +7,8 @@ const http = require('http');
 let etpl = new ETPL('./views','.html')
 
 setTimeout(function  () {
-    console.log(etpl.render('index', {
-        title:'欢迎！',
-        welcome:'非常欢迎你'
-    }))
+    let renderFn = etpl.compile('Hello ${etpl}');
+    console.log(renderFn({etpl:'etpl-wrap'}));
 },1000)
 
 http.createServer(function (req, res) {
