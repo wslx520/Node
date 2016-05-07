@@ -20,6 +20,7 @@ http.createServer(function (req, res) {
     })
     res.end(etpl.render('index', {
         title:'欢迎！',
-        welcome:'非常欢迎你'
+        welcome:'非常欢迎你',
+        em:'a string in a EM'
     }))
 }).listen(3001);
