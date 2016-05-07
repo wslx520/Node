@@ -1,5 +1,5 @@
 
-可clone本包，并启动test/server.js，然后访问 http://localhost:3001/ 查看效果。 
+可clone本包，并启动test/server.js，然后访问 http://localhost:3001/ 查看效果。模板文件可参考test/views 里的示例
 
 # etpl-wrap 使用文档
 

@@ -1,3 +1,6 @@
+
+使用示例及文档请见：**[Github](https://github.com/wslx520/Node/tree/master/etpl-wrap)**，欢迎提交Issue及建议
+
 # etpl-wrap etpl模板引擎的Node包装器
 
 etpl-wrap用于包装etpl模板引擎，以便于在Node.js环境下使用。
