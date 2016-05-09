@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>etpl 测试</title>
+    <title>${koa}</title>
 </head>
 <body>
-    ${welcome}
+    <h1>${welcome}</h1>
+    <p>模板引擎是：${engine}</p>
+    <br />
+    下面会导入两个target:
+    <br />
+    <!-- import: _hello -->
+    <!-- import: hello -->
 </body>
 </html>
+
+<!-- target: hello -->
+<p>
+    同文件内target: hello
+</p>
